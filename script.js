@@ -178,38 +178,7 @@ function fetchResults() {
         document.getElementById("resultSection").style.display = "none";
     }
 }
-
 // Function to add marks and calculate remarks
-const MAX_MARKS = { html: 30, css: 44, js: 35 };
-let testData = JSON.parse(localStorage.getItem("testData")) || {};
-
-function fetchResults() {
-    const rollNo = document.getElementById("rollNo").value.trim();
-    const testType = document.getElementById("testType").value;
-    const testNames = { html: "HTML", css: "CSS", js: "JavaScript" };
-
-    if (!rollNo || !testType) {
-        alert("Please enter Roll No and select a Test.");
-        return;
-    }
-
-    if (testData[rollNo] && testData[rollNo][testType]) {
-        const student = testData[rollNo];
-        const result = student[testType];
-
-        document.getElementById("studentName").value = student.name || "N/A";
-        document.getElementById("testMarks").value = result.marks;
-        document.getElementById("testPercentage").value = result.percentage;
-        document.getElementById("testRemarks").value = result.remarks;
-
-        document.getElementById("testName").innerText = `${testNames[testType]} Result`;
-        document.getElementById("resultSection").style.display = "block";
-    } else {
-        alert("No data found for the entered Roll No or selected Test.");
-        document.getElementById("resultSection").style.display = "none";
-    }
-}
-
 function addMarksPrompt() {
     const rollNo = prompt("Enter Roll Number:").trim();
     if (!rollNo) {
@@ -219,7 +188,7 @@ function addMarksPrompt() {
 
     let studentName = prompt("Enter Student Name:").trim();
     if (!studentName) {
-        studentName = "N/A";
+        studentName = "N/A"; // Default name if not provided
     }
 
     const testType = prompt("Enter Test Type (html, css, js):").toLowerCase();
@@ -244,6 +213,7 @@ function addMarksPrompt() {
     alert(`Data added for Roll No: ${rollNo}, Name: ${studentName}, Test: ${testType.toUpperCase()}`);
 }
 
+// Function to calculate remarks
 function calculateRemarks(marks, maxMarks) {
     const percentage = (marks / maxMarks) * 100;
     let remarks = "Fail";
@@ -254,17 +224,3 @@ function calculateRemarks(marks, maxMarks) {
 
     return { percentage: percentage.toFixed(2) + "%", remarks };
 }
-
-// Function to add JSON data to localStorage
-function addJsonToLocalStorage() {
-    const jsonData = prompt("Paste your JSON data here:");
-    try {
-        const parsedData = JSON.parse(jsonData);
-        testData = { ...testData, ...parsedData };
-        localStorage.setItem("testData", JSON.stringify(testData));
-        alert("JSON data added successfully!");
-    } catch (error) {
-        alert("Invalid JSON data! Please check your input.");
-    }
-}
-
