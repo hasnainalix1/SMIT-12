@@ -1,5 +1,5 @@
-const testData = {
-    '265627': {
+const MAX_MARKS = { html: 30, css: 44, js: 35 }; // Maximum marks for each test
+let testData = JSON.parse(localStorage.getItem("testData")) || {    '265627': {
       name: "Hasnain Ali",
       html: { marks: '22/30', percentage: '73%', remarks: 'Passed' },
       css: { marks: "34/44", percentage: '85%', remarks: 'Good' },
@@ -150,60 +150,76 @@ const testData = {
       }
                                                     
   };
-  
-  function fetchResults() {
-    const rollNo = document.getElementById('rollNo').value;
-    const testType = document.getElementById('testType').value;
-    const testNames = { html: "HTML", css: "CSS", js: "JavaScript (1)" };
-  
+
+// Function to fetch results
+function fetchResults() {
+    const rollNo = document.getElementById("rollNo").value.trim();
+    const testType = document.getElementById("testType").value;
+    const testNames = { html: "HTML", css: "CSS", js: "JavaScript" };
+
+    if (!rollNo || !testType) {
+        alert("Please enter Roll No and select a Test.");
+        return;
+    }
+
     if (testData[rollNo] && testData[rollNo][testType]) {
-      const student = testData[rollNo];
-      const result = student[testType];
-      
-      document.getElementById('studentName').value = student.name;
-      
-      document.getElementById('testMarks').value = result.marks;
-      document.getElementById('testPercentage').value = result.percentage;
-      document.getElementById('testRemarks').value = result.remarks;
-  
-      document.getElementById('testName').innerText = `${testNames[testType]} Result`;
-      document.getElementById('resultSection').style.display = 'block';
+        const student = testData[rollNo];
+        const result = student[testType];
+
+        document.getElementById("studentName").value = student.name || "N/A";
+        document.getElementById("testMarks").value = result.marks;
+        document.getElementById("testPercentage").value = result.percentage;
+        document.getElementById("testRemarks").value = result.remarks;
+
+        document.getElementById("testName").innerText = `${testNames[testType]} Result`;
+        document.getElementById("resultSection").style.display = "block";
     } else {
-      alert("No data found for the entered Roll No or selected Test.");
-      document.getElementById('resultSection').style.display = 'none';
+        alert("No data found for the entered Roll No or selected Test.");
+        document.getElementById("resultSection").style.display = "none";
     }
-  }
-function addStudentPrompt() {
-    const rollNo = prompt("Enter Roll Number:");
-    if (!rollNo || testData[rollNo]) {
-        alert(rollNo ? "Roll number already exists!" : "Roll number cannot be empty!");
+}
+
+// Function to add marks and calculate remarks
+function addMarksPrompt() {
+    const rollNo = prompt("Enter Roll Number:").trim();
+    if (!rollNo) {
+        alert("Roll number cannot be empty!");
         return;
     }
 
-    const name = prompt("Enter Student Name:");
-    if (!name) {
-        alert("Student name cannot be empty!");
+    const testType = prompt("Enter Test Type (html, css, js):").toLowerCase();
+    if (!["html", "css", "js"].includes(testType)) {
+        alert("Invalid test type! Please enter html, css, or js.");
         return;
     }
 
-    const htmlMarks = prompt("Enter HTML Marks (e.g., 25/30):");
-    const htmlPercentage = prompt("Enter HTML Percentage (e.g., 83%):");
-    const htmlRemarks = prompt("Enter HTML Remarks (e.g., Passed):");
+    const marks = parseInt(prompt(`Enter Marks for ${testType.toUpperCase()} (0-${MAX_MARKS[testType]}):`));
+    if (isNaN(marks) || marks < 0 || marks > MAX_MARKS[testType]) {
+        alert(`Invalid marks! Please enter a number between 0 and ${MAX_MARKS[testType]}.`);
+        return;
+    }
 
-    const cssMarks = prompt("Enter CSS Marks (e.g., 30/44):");
-    const cssPercentage = prompt("Enter CSS Percentage (e.g., 68%):");
-    const cssRemarks = prompt("Enter CSS Remarks (e.g., Good):");
+    // Calculate percentage and remarks
+    const { percentage, remarks } = calculateRemarks(marks, MAX_MARKS[testType]);
 
-    const jsMarks = prompt("Enter JavaScript Marks (e.g., 28/35):");
-    const jsPercentage = prompt("Enter JavaScript Percentage (e.g., 80%):");
-    const jsRemarks = prompt("Enter JavaScript Remarks (e.g., Excellent):");
+    // Update testData object
+    if (!testData[rollNo]) testData[rollNo] = { name: "N/A" }; // Default name
+    testData[rollNo][testType] = { marks: `${marks}/${MAX_MARKS[testType]}`, percentage, remarks };
 
-    testData[rollNo] = {
-        name,
-        html: { marks: htmlMarks || "N/A", percentage: htmlPercentage || "N/A", remarks: htmlRemarks || "N/A" },
-        css: { marks: cssMarks || "N/A", percentage: cssPercentage || "N/A", remarks: cssRemarks || "N/A" },
-        js: { marks: jsMarks || "N/A", percentage: jsPercentage || "N/A", remarks: jsRemarks || "N/A" }
-    };
+    // Save to localStorage
+    localStorage.setItem("testData", JSON.stringify(testData));
 
-    alert(`Student ${name} (Roll No: ${rollNo}) added successfully!`);
+    alert(`Data added for Roll No: ${rollNo}, Test: ${testType.toUpperCase()}`);
+}
+
+// Function to calculate remarks
+function calculateRemarks(marks, maxMarks) {
+    const percentage = (marks / maxMarks) * 100;
+    let remarks = "Fail";
+    if (percentage >= 80) remarks = "Excellent";
+    else if (percentage >= 70) remarks = "Good";
+    else if (percentage >= 60) remarks = "Passed";
+    else if (percentage >= 50) remarks = "Promote";
+
+    return { percentage: percentage.toFixed(2) + "%", remarks };
 }
