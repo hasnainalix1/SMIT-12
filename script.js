@@ -173,3 +173,37 @@ const testData = {
       document.getElementById('resultSection').style.display = 'none';
     }
   }
+function addStudentPrompt() {
+    const rollNo = prompt("Enter Roll Number:");
+    if (!rollNo || testData[rollNo]) {
+        alert(rollNo ? "Roll number already exists!" : "Roll number cannot be empty!");
+        return;
+    }
+
+    const name = prompt("Enter Student Name:");
+    if (!name) {
+        alert("Student name cannot be empty!");
+        return;
+    }
+
+    const htmlMarks = prompt("Enter HTML Marks (e.g., 25/30):");
+    const htmlPercentage = prompt("Enter HTML Percentage (e.g., 83%):");
+    const htmlRemarks = prompt("Enter HTML Remarks (e.g., Passed):");
+
+    const cssMarks = prompt("Enter CSS Marks (e.g., 30/44):");
+    const cssPercentage = prompt("Enter CSS Percentage (e.g., 68%):");
+    const cssRemarks = prompt("Enter CSS Remarks (e.g., Good):");
+
+    const jsMarks = prompt("Enter JavaScript Marks (e.g., 28/35):");
+    const jsPercentage = prompt("Enter JavaScript Percentage (e.g., 80%):");
+    const jsRemarks = prompt("Enter JavaScript Remarks (e.g., Excellent):");
+
+    testData[rollNo] = {
+        name,
+        html: { marks: htmlMarks || "N/A", percentage: htmlPercentage || "N/A", remarks: htmlRemarks || "N/A" },
+        css: { marks: cssMarks || "N/A", percentage: cssPercentage || "N/A", remarks: cssRemarks || "N/A" },
+        js: { marks: jsMarks || "N/A", percentage: jsPercentage || "N/A", remarks: jsRemarks || "N/A" }
+    };
+
+    alert(`Student ${name} (Roll No: ${rollNo}) added successfully!`);
+}
