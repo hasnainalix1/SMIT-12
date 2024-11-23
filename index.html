@@ -7,50 +7,42 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="container">
         <h2>SMIT Batch 12 (Malir - Male)</h2>
         <form id="resultForm">
-          <label for="rollNo">Enter Roll No:</label>
-          <input type="text" id="rollNo" placeholder="Roll Number" required>
-    
-          <label for="testType">Select Test:</label>
-          <select id="testType">
-            <option value="">--Select Test--</option>
-            <option value="html">HTML</option>
-            <option value="css">CSS</option>
-            <option value="js">JavaScript</option>
-          </select>
-    
-          <div class="test-section" id="resultSection" style="display: none;">
-            <h3 id="testName">Test Results</h3>
-            
-            <label>Student Name:</label>
-            <input type="text" id="studentName" readonly>
-            
-            <label>Marks:</label>
-            <input type="text" id="testMarks" readonly>
-            <label>Percentage:</label>
-            <input type="text" id="testPercentage" readonly>
-            <label>Status:</label>
-            <input type="text" id="testRemarks" readonly>
-          </div>
-          
-    
-          <button type="button" onclick="fetchResults()">Get Results</button>
+            <label for="rollNo">Enter Roll No:</label>
+            <input type="text" id="rollNo" placeholder="Roll Number" required>
+        
+            <label for="testType">Select Test:</label>
+            <select id="testType">
+                <option value="">--Select Test--</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="js">JavaScript</option>
+            </select>
+        
+            <div class="test-section" id="resultSection" style="display: none;">
+                <h3 id="testName">Test Results</h3>
+                <label>Student Name:</label>
+                <input type="text" id="studentName" readonly>
+                <label>Marks:</label>
+                <input type="text" id="testMarks" readonly>
+                <label>Percentage:</label>
+                <input type="text" id="testPercentage" readonly>
+                <label>Status:</label>
+                <input type="text" id="testRemarks" readonly>
+            </div>
+        
+            <button type="button" onclick="fetchResults()">Get Results</button>
+            <button type="button" onclick="addStudentPrompt()">Add Student</button>
         </form>
-      </div>
+    </div>
 
-
-
-<footer>
-  <div class="copy">
-    <h1>&copy; 2024 | Hasnain Ali (Student)</h1>
-  </div>
-</footer>
-
-
-
+    <footer>
+        <div class="copy">
+            <h1>&copy; 2024 | Hasnain Ali (Student)</h1>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
